@@ -1,0 +1,13 @@
+# Functions KEYWORD1
+MAX17043		KEYWORD1
+
+# Methods KEYWORD2
+cellVoltage		KEYWORD2
+stateOfCharge		KEYWORD2
+version			KEYWORD2
+
+# Structures KEYWORD3
+
+# Constants LITERAL1
+
+# Variables LITERAL2

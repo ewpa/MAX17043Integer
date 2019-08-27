@@ -18,10 +18,10 @@
   The author may be reached at https://www.ewan.cc/ for queries.
 */
 
-#include "MAX17043Integer.h"
+#include "MAX17043.h"
 
 // Create an instance of the MAX17043 fuel gauge.
-MAX17043Integer gauge;
+MAX17043 gauge;
 
 // Output stream.
 #ifdef ARDUINO_ARCH_AVR

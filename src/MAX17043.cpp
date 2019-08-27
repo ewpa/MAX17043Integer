@@ -1,6 +1,6 @@
 /*
   MAX17043 Lithium Cell Fuel Gauge over I2C using integer calculations.
-  MAX17043Integer.cpp Copyright (C) 2019 Ewan Parker.
+  MAX17043.cpp Copyright (C) 2019 Ewan Parker.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,12 +18,12 @@
   The author may be reached at https://www.ewan.cc/ for queries.
 */
 
-#include "MAX17043Integer.h"
-#include "MAX17043IntegerPrivate.h"
+#include "MAX17043.h"
+#include "MAX17043Private.h"
 #include <Wire.h>
 
 // Constructor.
-MAX17043Integer::MAX17043Integer()
+MAX17043::MAX17043()
 {
   #ifdef ARDUINO_ARCH_ESP32
   Wire.begin(33, 32, 100000);
@@ -47,19 +47,19 @@ uint16_t _readReg16(uint8_t reg)
 }
 
 // Read and return the cell voltage in millivolts.
-uint16_t MAX17043Integer::cellVoltage()
+uint16_t MAX17043::cellVoltage()
 {
   return 1.25 * (_readReg16(MAX17043_REG_VCELL) >> 4);
 }
 
 // Read and return the percentage state of charge.
-uint8_t MAX17043Integer::stateOfCharge()
+uint8_t MAX17043::stateOfCharge()
 {
   return _readReg16(MAX17043_REG_SOC) >> 8;
 }
 
 // Manufacturer's version.
-uint16_t MAX17043Integer::version()
+uint16_t MAX17043::version()
 {
   return _readReg16(MAX17043_REG_VERSION);
 }
