@@ -1,6 +1,6 @@
 /*
   MAX17043 Lithium Cell Fuel Gauge over I2C using integer calculations.
-  MAX17043Private.h Copyright (C) 2019 Ewan Parker.
+  MAX17043_Address.h Copyright (C) 2019 Ewan Parker.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,13 +18,9 @@
   The author may be reached at https://www.ewan.cc/ for queries.
 */
 
-#ifndef _Max17043Private_H
-#define _Max17043Private_H
+#ifndef _Max17043_Address_H
+#define _Max17043_Address_H
 
 #define MAX17043_I2C_ADDR 0x36
 
-#define MAX17043_REG_VCELL    0x02
-#define MAX17043_REG_SOC      0x04
-#define MAX17043_REG_VERSION  0x08
-
-#endif /* _Max17043Private_H */
+#endif /* _Max17043_Address_H */

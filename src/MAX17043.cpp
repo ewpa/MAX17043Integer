@@ -19,14 +19,15 @@
 */
 
 #include "MAX17043.h"
-#include "MAX17043Private.h"
+#include "defs/MAX17043_Address.h"
+#include "defs/MAX17043_Registers.h"
 #include <Wire.h>
 
 // Constructor.
 MAX17043::MAX17043()
 {
-  #ifdef ARDUINO_ARCH_ESP32
-  Wire.begin(33, 32, 100000);
+  #ifdef MAX17043_I2C_SDA
+  Wire.begin(MAX17043_I2C_SDA, MAX17043_I2C_SCL, MAX17043_I2C_BPS);
   #else
   Wire.begin();
   #endif

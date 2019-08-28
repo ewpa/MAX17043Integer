@@ -1,6 +1,6 @@
 /*
   MAX17043 Lithium Cell Fuel Gauge over I2C using integer calculations.
-  MAX17043.h Copyright (C) 2019 Ewan Parker.
+  MAX17043_Registers.h Copyright (C) 2019 Ewan Parker.
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,37 +18,11 @@
   The author may be reached at https://www.ewan.cc/ for queries.
 */
 
-#ifndef _Max17043_H
-#define _Max17043_H
+#ifndef _Max17043_Registers_H
+#define _Max17043_Registers_H
 
-// STM32 GPIO pins.
-#ifdef ARDUINO_ARCH_STM32F1
-#endif
-#define MAX17043_PWR_INT PB1
+#define MAX17043_REG_VCELL    0x02
+#define MAX17043_REG_SOC      0x04
+#define MAX17043_REG_VERSION  0x08
 
-// Espressif ESP32 GPIO pins.
-#ifdef ARDUINO_ARCH_ESP32
-#define MAX17043_I2C_SDA 33
-#define MAX17043_I2C_SCL 32
-#define MAX17043_I2C_BPS 100000
-#define MAX17043_PWR_INT 35
-#endif
-
-// Microchip AVR and other Arduino GPIO pins.
-#ifndef MAX17043_PWR_INT
-#define MAX17043_PWR_INT 2
-#endif
-
-#include <Arduino.h>
-
-class MAX17043
-{
-  public:
-    MAX17043();
-
-    uint16_t cellVoltage();  // Return the cell's voltage in mV.
-    uint8_t stateOfCharge(); // Return the charge percentage.
-    uint16_t version();      // Show manufacturer's version.
-};
-
-#endif /* _Max17043_H */
+#endif /* _Max17043_Registers_H */
