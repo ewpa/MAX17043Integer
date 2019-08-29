@@ -24,5 +24,6 @@
 #define MAX17043_REG_VCELL    0x02
 #define MAX17043_REG_SOC      0x04
 #define MAX17043_REG_VERSION  0x08
+#define MAX17043_REG_CONFIG   0x0C
 
 #endif /* _Max17043_Registers_H */

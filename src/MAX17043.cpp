@@ -47,6 +47,16 @@ uint16_t _readReg16(uint8_t reg)
   return (msb << 8) + lsb;
 }
 
+// Write a 16 bit register.
+void _writeReg16(uint8_t reg, uint16_t val)
+{
+  Wire.beginTransmission(MAX17043_I2C_ADDR);
+  Wire.write((uint8_t)reg);
+  Wire.write((uint8_t)(val >> 8));   // MSB.
+  Wire.write((uint8_t)(val & 0xFF)); // LSB.
+  Wire.endTransmission();
+}
+
 // Read and return the cell voltage in millivolts.
 uint16_t MAX17043::cellVoltage()
 {
@@ -63,4 +73,32 @@ uint8_t MAX17043::stateOfCharge()
 uint16_t MAX17043::version()
 {
   return _readReg16(MAX17043_REG_VERSION);
+}
+
+// Set the charge percentage (or lower) for trigger, ranging from 1 to 32%.
+void MAX17043::setAlertPercent(uint8_t pct)
+{
+  if (pct < 1) pct = 1; else if (pct > 32) pct = 32;
+  uint16_t config = _readReg16(MAX17043_REG_CONFIG);
+  // ATHD is 2's complement and 5 bits.
+  uint8_t athd = pct - 1;
+  athd ^= 0xFF;
+  config &= (0xFFFF - 0x001F);
+  config |= (athd & 0x1F);
+  _writeReg16(MAX17043_REG_CONFIG, config);
+}
+
+// Report low power alert flag state.
+bool MAX17043::getAlertStatus()
+{
+  uint16_t config = _readReg16(MAX17043_REG_CONFIG);
+  return (config & 0x20) != 0x00;
+}
+
+// Clear low power alert flag.
+void MAX17043::clearAlertStatus()
+{
+  uint16_t config = _readReg16(MAX17043_REG_CONFIG);
+  config &= (0xFFFF - 0x0020);
+  _writeReg16(MAX17043_REG_CONFIG, config);
 }

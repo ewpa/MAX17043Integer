@@ -21,22 +21,11 @@
 #ifndef _Max17043_H
 #define _Max17043_H
 
-// STM32 GPIO pins.
-#ifdef ARDUINO_ARCH_STM32F1
-#endif
-#define MAX17043_PWR_INT PB1
-
-// Espressif ESP32 GPIO pins.
+// Espressif ESP32 -- override the I2C pins.
 #ifdef ARDUINO_ARCH_ESP32
 #define MAX17043_I2C_SDA 33
 #define MAX17043_I2C_SCL 32
 #define MAX17043_I2C_BPS 100000
-#define MAX17043_PWR_INT 35
-#endif
-
-// Microchip AVR and other Arduino GPIO pins.
-#ifndef MAX17043_PWR_INT
-#define MAX17043_PWR_INT 2
 #endif
 
 #include <Arduino.h>
@@ -46,9 +35,15 @@ class MAX17043
   public:
     MAX17043();
 
+    // General status operations.
     uint16_t cellVoltage();  // Return the cell's voltage in mV.
     uint8_t stateOfCharge(); // Return the charge percentage.
     uint16_t version();      // Show manufacturer's version.
+
+    // Low power alerting operations.
+    void setAlertPercent(uint8_t); // Set charge % (or lower) to trigger.
+    bool getAlertStatus();         // Report low power alert flag state.
+    void clearAlertStatus();       // Clear low power alert flag.
 };
 
 #endif /* _Max17043_H */

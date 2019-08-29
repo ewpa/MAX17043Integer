@@ -1,13 +1,18 @@
-# Functions KEYWORD1
-MAX17043		KEYWORD1
+# https://github.com/arduino/Arduino/wiki/Arduino-IDE-1.5:-Library-specification
 
-# Methods KEYWORD2
-cellVoltage		KEYWORD2
-stateOfCharge		KEYWORD2
-version			KEYWORD2
+RESERVED_WORD	 	editor.reserved_word.style	(was KEYWORD3)
+cellVoltage		RESERVED_WORD
+stateOfCharge		RESERVED_WORD
+version			RESERVED_WORD
+setAlertPercent		RESERVED_WORD
+getAlertStatus		RESERVED_WORD
+clearAlertStatus	RESERVED_WORD
 
-# Structures KEYWORD3
+RESERVED_WORD_2 	editor.reserved_word_2.style 	(was LITERAL1)
 
-# Constants LITERAL1
+DATA_TYPE 		editor.data_type.style 		(was KEYWORD1)
+MAX17043		DATA_TYPE
 
-# Variables LITERAL2
+PREPROCESSOR 		editor.preprocessor.style 	(was KEYWORD3)
+
+LITERAL_BOOLEAN 	editor.literal_boolean.style 	(was LITERAL1)

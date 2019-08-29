@@ -20,6 +20,21 @@
 
 #include "MAX17043.h"
 
+// STM32 GPIO pin.
+#ifdef ARDUINO_ARCH_STM32F1
+#define PWR_INT_PIN PB1
+#endif
+
+// Espressif ESP32 GPIO pin.
+#ifdef ARDUINO_ARCH_ESP32
+#define PWR_INT_PIN 35
+#endif
+
+// Microchip AVR and other Arduino GPIO pins.
+#ifndef PWR_INT_PIN
+#define PWR_INT_PIN 2
+#endif
+
 // Create an instance of the MAX17043 fuel gauge.
 MAX17043 gauge;
 
@@ -37,10 +52,34 @@ HardwareSerial *s;
 #define SERIAL_BAUD 115200
 #endif
 
-void info() {
-  s->println(); s->println();
+void info()
+{
+  s->println();
   s->println("Interrogate an I2C attached MAX17043 Lithium Cell Fuel Gauge.");
-  s->println("Ewan Parker 26th August 2019.");
+  s->println("Copyright (C) 2019 Ewan Parker");
+  s->println("Type ? for assistance");
+}
+
+void help()
+{
+  s->println();
+  s->println("[?]: Program information and help.");
+  s->println("[V]: Read the cell's voltage.");
+  s->println("[S]: Calculate cell's charge state percentage.");
+  s->println("[I]: Show manufacturer's version number.");
+  s->println("[3]: Set low charge interrupt threshold to 32% (maximum).");
+  s->println("[4]: Set low charge interrupt threshold to 4% (default).");
+  s->println("[L]: Show state of low charge interrupt.");
+  s->println("[C]: Clear low charge interrupt.");
+}
+
+void dump()
+{
+  if (digitalRead(PWR_INT_PIN) == LOW)
+  {
+    s->println();
+    s->println("~ALRT interrupt asserted");
+  }
 }
 
 void cellVoltage()
@@ -61,32 +100,56 @@ void version()
   s->print("Version: "); s->println(ver);
 }
 
+void setAlertPercent(uint8_t pct)
+{
+  gauge.setAlertPercent(pct);
+}
+
+void showAlertStatus()
+{
+  bool i = gauge.getAlertStatus();
+  s->print("Alert status: "); s->println(i ? "active" : "inactive");
+}
+
+void clearAlertStatus()
+{
+  gauge.clearAlertStatus();
+}
+
 void setup()
 {
   s = &Serial;
   s->begin(SERIAL_BAUD);
-  // Show program and chip information.
+  pinMode(PWR_INT_PIN, INPUT_PULLUP);
+
+  // Show program and help information.
+  s->println();
   info();
+  help();
 }
 
-void loop() {
-  s->println();
+void loop()
+{
+  // Dump state.
+  dump();
+
   // Show options.
-  s->print("[?] [V]oltage [S]tate% > ");
+  s->println();
+  s->print("[?] [V]oltage [S]tate% [L]ow [C]lear > ");
   while (! s->available()) {}
   // Wait for a character to be typed, then process the required action.
   char in = s->read(); if (in >= 'a' && in <= 'z') in += ('A' - 'a');
-  switch (in) {
-    case '?' : s->println("[?] Info"); info(); break;
+  switch (in)
+  {
+    case '?' : s->println("[?] Help"); help(); break;
     case 'V' : s->println("Cell [V]oltage"); cellVoltage(); break;
     case 'S' : s->println("Percent [S]tate of Charge"); stateOfCharge(); break;
     case 'I' : s->println("Chip Vers[I]on"); version(); break;
-    default  : s->println("[HELP]");
-               s->println();
-               s->println("[?]: Program and Chip information.");
-               s->println("[V]: Read the cell's voltage.");
-               s->println("[S]: Calculate cell's charge state percentage.");
-               s->println("[I]: Show manufacturer's version number.");
+    case '3' : s->println("Alert at [3]2%"); setAlertPercent(32); break;
+    case '4' : s->println("Alert at [4]%"); setAlertPercent(4); break;
+    case 'L' : s->println("[L]ow charge flagged?"); showAlertStatus(); break;
+    case 'C' : s->println("[C]lear low charge alert"); clearAlertStatus();
                break;
+    default  : s->println("[INFO]"); info(); break;
   }
 }
