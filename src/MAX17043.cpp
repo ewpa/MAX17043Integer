@@ -19,7 +19,6 @@
 */
 
 #include "MAX17043.h"
-#include "defs/MAX17043_Address.h"
 #include "defs/MAX17043_Registers.h"
 #include <Wire.h>
 

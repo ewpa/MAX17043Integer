@@ -21,6 +21,8 @@
 #ifndef _Max17043_H
 #define _Max17043_H
 
+#define MAX17043_I2C_ADDR 0x36
+
 // Espressif ESP32 -- override the I2C pins.
 #ifdef ARDUINO_ARCH_ESP32
 #define MAX17043_I2C_SDA 33
